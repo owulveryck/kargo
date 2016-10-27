@@ -42,10 +42,14 @@ func build(name string) (string, error) {
 	cmd := exec.Command(command[0], command[1:]...)
 
 	gopath := os.Getenv("GOPATH")
+	goroot := os.Getenv("GOROOT")
+	mypath := os.Getenv("PATH")
 	cmd.Env = []string{
 		"GOOS=linux",
 		"GOARCH=amd64",
 		"GOPATH=" + gopath,
+		"GOROOT=" + goroot,
+		"PATH=" + mypath,
 	}
 
 	data, err := cmd.CombinedOutput()

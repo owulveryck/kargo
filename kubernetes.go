@@ -299,7 +299,7 @@ func createReplicaSet(config DeploymentConfig) error {
 	container := Container{
 		Args:         config.Args,
 		Command:      []string{filepath.Join("/opt/bin", config.Name)},
-		Image:        "gcr.io/hightowerlabs/alpine",
+		Image:        "gcr.io/my-kubernetes-lab-146109/alpine",
 		Name:         config.Name,
 		VolumeMounts: volumeMounts,
 	}
@@ -341,7 +341,7 @@ func createReplicaSet(config DeploymentConfig) error {
 	initContainers := []Container{
 		Container{
 			Name:    "install",
-			Image:   "gcr.io/hightowerlabs/alpine",
+			Image:   "gcr.io/my-kubernetes-lab-146109/alpine",
 			Command: []string{"wget", "-O", binaryPath, config.BinaryURL},
 			VolumeMounts: []VolumeMount{
 				VolumeMount{
@@ -352,7 +352,7 @@ func createReplicaSet(config DeploymentConfig) error {
 		},
 		Container{
 			Name:    "configure",
-			Image:   "gcr.io/hightowerlabs/alpine",
+			Image:   "gcr.io/my-kubernetes-lab-146109/alpine",
 			Command: []string{"chmod", "+x", binaryPath},
 			VolumeMounts: []VolumeMount{
 				VolumeMount{
