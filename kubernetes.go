@@ -52,7 +52,7 @@ func getPods(namespace, labelSelector string) (*PodList, error) {
 		return nil, ErrNotExist
 	}
 	if resp.StatusCode != 200 {
-		return nil, errors.New("Get pods error non 200 reponse: " + resp.Status)
+		return nil, errors.New("Get pods error non 200 response: " + resp.Status)
 	}
 
 	err = json.NewDecoder(resp.Body).Decode(&podList)
@@ -119,7 +119,7 @@ func getLogs(config DeploymentConfig, w io.Writer) error {
 					continue
 				}
 				if resp.StatusCode != 200 {
-					fmt.Println(errors.New("Get replica set error non 200 reponse: " + resp.Status))
+					fmt.Println(errors.New("Get replica set error non 200 response: " + resp.Status))
 					time.Sleep(5 * time.Second)
 					continue
 				}
@@ -158,7 +158,7 @@ func getReplicaSet(namespace, name string) (*ReplicaSet, error) {
 		return nil, ErrNotExist
 	}
 	if resp.StatusCode != 200 {
-		return nil, errors.New("Get deployment error non 200 reponse: " + resp.Status)
+		return nil, errors.New("Get deployment error non 200 response: " + resp.Status)
 	}
 
 	err = json.NewDecoder(resp.Body).Decode(&rs)
@@ -192,7 +192,7 @@ func getScale(namespace, name string) (*Scale, error) {
 		return nil, ErrNotExist
 	}
 	if resp.StatusCode != 200 {
-		return nil, errors.New("Get scale error non 200 reponse: " + resp.Status)
+		return nil, errors.New("Get scale error non 200 response: " + resp.Status)
 	}
 
 	err = json.NewDecoder(resp.Body).Decode(&scale)
@@ -244,7 +244,7 @@ func scaleReplicaSet(namespace, name string, replicas int) error {
 			return err
 		}
 		fmt.Println(string(data))
-		return errors.New("Scale ReplicaSet error non 200 reponse: " + resp.Status)
+		return errors.New("Scale ReplicaSet error non 200 response: " + resp.Status)
 	}
 
 	return nil
@@ -277,7 +277,7 @@ func deleteReplicaSet(config DeploymentConfig) error {
 		return ErrNotExist
 	}
 	if resp.StatusCode != 200 {
-		return errors.New("Delete ReplicaSet error non 200 reponse: " + resp.Status)
+		return errors.New("Delete ReplicaSet error non 200 response: " + resp.Status)
 	}
 
 	return nil
