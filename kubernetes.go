@@ -21,6 +21,7 @@ var (
 	podsEndpoint        = "/api/v1/namespaces/%s/pods"
 )
 
+// ErrNotExist is a convenient object
 var ErrNotExist = errors.New("does not exist")
 
 func getPods(namespace, labelSelector string) (*PodList, error) {
@@ -105,6 +106,7 @@ func getLogs(config DeploymentConfig, w io.Writer) error {
 					time.Sleep(5 * time.Second)
 					continue
 				}
+				defer resp.Body.Close()
 
 				if resp.StatusCode == 404 {
 					data, err := ioutil.ReadAll(resp.Body)
@@ -120,6 +122,11 @@ func getLogs(config DeploymentConfig, w io.Writer) error {
 				}
 				if resp.StatusCode != 200 {
 					fmt.Println(errors.New("Get replica set error non 200 response: " + resp.Status))
+					body, err := ioutil.ReadAll(resp.Body)
+					if err == nil {
+						fmt.Println("Body: " + string(body))
+
+					}
 					time.Sleep(5 * time.Second)
 					continue
 				}
@@ -284,13 +291,13 @@ func deleteReplicaSet(config DeploymentConfig) error {
 }
 
 func createReplicaSet(config DeploymentConfig) error {
-	volumes := make([]Volume, 0)
+	var volumes []Volume
 	volumes = append(volumes, Volume{
 		Name:         "bin",
 		VolumeSource: VolumeSource{},
 	})
 
-	volumeMounts := make([]VolumeMount, 0)
+	var volumeMounts []VolumeMount
 	volumeMounts = append(volumeMounts, VolumeMount{
 		Name:      "bin",
 		MountPath: "/opt/bin",
@@ -328,7 +335,7 @@ func createReplicaSet(config DeploymentConfig) error {
 	}
 
 	if len(config.Env) > 0 {
-		env := make([]EnvVar, 0)
+		var env []EnvVar
 		for name, value := range config.Env {
 			env = append(env, EnvVar{Name: name, Value: value})
 		}
